@@ -22,7 +22,7 @@ inputPorts:
     extra: {}
     syncType: pull
     type: s3
-    sourceUrn: urn:dv:datasource:68bca832-8f67-48e9-8136-d227ac87d57
+    sourceUrn: urn:dv:datasource:68bca832-8f67-48e9-8136-d227ac87d577
     entityId:
       alias: xpay_transactions
       createEntity: true
