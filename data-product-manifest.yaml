@@ -1,7 +1,7 @@
 ---
 version: 0.0.1
 discoveryPort:
-  name: X-Pay Transactions Data Latest
+  name: X-Pay Transactions Data Broken Source
   description: XPay (aka. MAF Pay) provides Payments APIs, SDKs and Web libraries
     for online platforms to integrate Payment solutions and conduct business. As
     a result of this there are transactions that are recorded which explain
