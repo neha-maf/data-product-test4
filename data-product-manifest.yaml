@@ -27,7 +27,7 @@ inputPorts:
       alias: xpay_transactions
       createEntity: true
       type: s3-bucket
-      entityPath: s3://mafpay-dev/inbound/MAFPay_Transaction_#YYYY-MM-DD#_*
+      entityPath: s3://dp-input-bucket/mpay-tx/*
       incremetal: true
       fileFormat: csv
       delimiter: ","
