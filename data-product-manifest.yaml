@@ -1,7 +1,7 @@
 ---
 version: 0.0.1
 discoveryPort:
-  name: X-Pay Transactions Data Fixed Source
+  name: "[Testing] X-Pay Transactions Data"
   description: XPay (aka. MAF Pay) provides Payments APIs, SDKs and Web libraries
     for online platforms to integrate Payment solutions and conduct business. As
     a result of this there are transactions that are recorded which explain
@@ -22,16 +22,26 @@ inputPorts:
     extra: {}
     syncType: pull
     type: s3
-    sourceUrn: urn:dv:datasource:68bca832-8f67-48e9-8136-d227ac87d577
+    sourceUrn: urn:dv:datasource:0ec70f7b-0691-4059-a0ee-e00a49c62542
     entityId:
       alias: xpay_transactions
       createEntity: true
+      entityName: xpay_transactions_append_mode
       type: s3-bucket
-      entityPath: s3://dp-input-bucket/mpay-tx/*
-      incremetal: true
+      entityPath: s3://mafpay-dev/inbound/MAFPay_Transactions_##mafpay_date##*.csv
+      entityVariables:
+        - key: mafpay_date
+          value: date-YYYYMMdd
+      incrementalLoad: true
+      incrementalStrategy:
+          frequency:
+            - keyReference : mafpay_date
+              mode: absolute
+              interval : -1
       fileFormat: csv
       delimiter: ","
       header: true
+      inferSchema: true
       processingTimeColumn:
         - created_date
       actualTimeColumn:
@@ -40,10 +50,11 @@ inputPorts:
         - "*"
 stateManagement:
   alias: xpay_transactions_sm
-  refreshInterval: 00 10 * * *
+  refreshInterval: 00 09 * * *
   updateStrategy: append
   productStoreState:
     logicalSchema:
+      type: object
       properties:
         legal_entity:
           type: string
@@ -137,10 +148,12 @@ stateManagement:
           type: string
         extra_data:
           type: string
-    retentionVersions: "10"
+  retentionVersions: "10"
 transformation:
-  sql: select * from xpay_transactions
+  sql: SELECT *,'' as __file_name, current_timestamp() as __processing_ts FROM xpay_transactions
 outputPort:
   channels:
+    - channelType: REST-API
+      queryType: SQL
     - channelType: JDBC
       queryType: SQL
